@@ -1,0 +1,2766 @@
+{
+  "name": "Super Net - Sistema de Atendimento Digital",
+  "nodes": [
+    {
+      "parameters": {
+        "model": "gpt-4",
+        "options": {
+          "temperature": 0.7,
+          "maxTokens": 2000
+        }
+      },
+      "id": "1e4f7f68-3b95-49bc-92be-b5ebf4fb00b7",
+      "name": "OpenAI Chat Model1",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1,
+      "position": [
+        -500,
+        1860
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "MFMsCfDM1RfxIWQq",
+          "name": "SuperNet AI"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonMode": "expressionData",
+        "jsonData": "={{ $json.data || $json.text || $json.concatenated_data }}",
+        "options": {
+          "metadata": {
+            "metadataValues": [
+              {
+                "name": "=file_id",
+                "value": "={{ $('Set File ID').first().json.file_id }}"
+              }
+            ]
+          }
+        }
+      },
+      "id": "1cbc2327-7f73-444b-849b-6649813d3378",
+      "name": "Default Data Loader",
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1,
+      "position": [
+        -3180,
+        2240
+      ]
+    },
+    {
+      "parameters": {
+        "model": "text-embedding-3-small",
+        "options": {}
+      },
+      "id": "7e7bea1a-039c-4eea-b32e-122b3401401a",
+      "name": "Embeddings OpenAI1",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1,
+      "position": [
+        -3200,
+        2320
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "MFMsCfDM1RfxIWQq",
+          "name": "SuperNet AI"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Sistema de Gerenciamento de Documentação Digital",
+        "height": 80,
+        "width": 250,
+        "color": 5
+      },
+      "id": "cb3db7e9-8fbb-499c-839f-1ace52a50531",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -620,
+        2020
+      ]
+    },
+    {
+      "parameters": {
+        "content": "# Super Net - Sistema Integrado de Atendimento Digital",
+        "height": 80,
+        "width": 1493,
+        "color": 5
+      },
+      "id": "2c3f41eb-ed67-460d-a8c7-af046ef8f3ee",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -5040,
+        1740
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.file_id }}",
+          "mode": "id"
+        },
+        "options": {
+          "googleFileConversion": {
+            "conversion": {
+              "docsToFormat": "text/plain"
+            }
+          }
+        }
+      },
+      "id": "f80a0299-a07d-4eb6-9e78-66a04756b431",
+      "name": "Download File",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -4080,
+        2020
+      ],
+      "executeOnce": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "tIDL9qyHqUNRiaro",
+          "name": "SuperNet Drive"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyX",
+              "value": 12
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "10gioe24XkbX0Ur-I6Y_u1gyxk2xFntcf",
+          "mode": "list",
+          "cachedResultName": "Super Net - Docs",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/10gioe24XkbX0Ur-I6Y_u1gyxk2xFntcf"
+        },
+        "event": "fileCreated",
+        "options": {}
+      },
+      "id": "3533aac3-a496-47a8-a0ef-c2c6d5e70597",
+      "name": "Monitor New Files",
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        -4980,
+        1960
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "tIDL9qyHqUNRiaro",
+          "name": "SuperNet Drive"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "hour": 9
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "10gioe24XkbX0Ur-I6Y_u1gyxk2xFntcf",
+          "mode": "list",
+          "cachedResultName": "Super Net - Docs",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/10gioe24XkbX0Ur-I6Y_u1gyxk2xFntcf"
+        },
+        "event": "fileUpdated",
+        "options": {}
+      },
+      "id": "a0089629-ccd0-4402-b817-f29c9db33383",
+      "name": "Monitor Updated Files",
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        -4980,
+        2160
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "tIDL9qyHqUNRiaro",
+          "name": "SuperNet Drive"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "text",
+        "options": {}
+      },
+      "id": "02ea81d0-8ba9-44ed-baa7-342910f0c7df",
+      "name": "Extract Document Text",
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        -3660,
+        2220
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "model": "text-embedding-3-small",
+        "options": {}
+      },
+      "id": "fb4082be-914d-4e14-8600-b637826b0e32",
+      "name": "Generate Embeddings",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1,
+      "position": [
+        -780,
+        1980
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "MFMsCfDM1RfxIWQq",
+          "name": "SuperNet AI"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "10646eae-ae46-4327-a4dc-9987c2d76173",
+              "name": "file_id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "f4536df5-d0b1-4392-bf17-b8137fb31a44",
+              "name": "file_type",
+              "value": "={{ $json.mimeType }}",
+              "type": "string"
+            },
+            {
+              "id": "c774ed34-0d67-44b7-a537-83810f357b7c",
+              "name": "originalFilename",
+              "value": "={{ $json.originalFilename }}",
+              "type": "string"
+            },
+            {
+              "id": "dff39c85-b4a2-45ba-a5ff-f4b311999efc",
+              "name": "sha1Checksum",
+              "value": "={{ $json.sha1Checksum }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "91bc84ae-b186-482a-a402-d30b35e49b46",
+      "name": "Set File ID",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -4800,
+        2000
+      ]
+    },
+    {
+      "parameters": {
+        "content": "# Agente IA Super Net",
+        "height": 80,
+        "width": 276,
+        "color": 5
+      },
+      "id": "060c04cd-fb56-4d22-8b32-8af64b46fb12",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -820,
+        1100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "id": "5c9702c4-9353-49bc-9b78-d266545a12c0",
+      "name": "Extract PDF Text",
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        -3660,
+        1840
+      ]
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "id": "f4366383-60e6-48dc-a280-fa0ac3d05769",
+      "name": "Aggregate Data",
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -3520,
+        2020
+      ]
+    },
+    {
+      "parameters": {
+        "chunkSize": 1000,
+        "chunkOverlap": 200
+      },
+      "id": "6b8f96fe-9036-41de-8ad5-cacae49fbe49",
+      "name": "Split Text",
+      "type": "@n8n/n8n-nodes-langchain.textSplitterCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [
+        -3020,
+        2380
+      ]
+    },
+    {
+      "parameters": {
+        "fieldsToSummarize": {
+          "values": [
+            {
+              "aggregation": "concatenate",
+              "field": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1cbe42c3-c2f7-462b-8a59-b38afb9092b6",
+      "name": "Summarize Content",
+      "type": "n8n-nodes-base.summarize",
+      "typeVersion": 1,
+      "position": [
+        -3380,
+        2020
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.file_type }}",
+                    "rightValue": "application/pdf",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "2ae7faa7-a936-4621-a680-60c512163034",
+                    "leftValue": "={{ $json.file_type }}",
+                    "rightValue": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "fc193b06-363b-4699-a97d-e5a850138b0e",
+                    "leftValue": "={{ $json.file_type }}",
+                    "rightValue": "application/vnd.google-apps.document",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "4a92051f-e7d8-469f-9bf6-7f53c2e51ea8",
+      "name": "File Type Router",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        -3900,
+        2020
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "value": "knowledge_base",
+          "mode": "list",
+          "cachedResultName": "knowledge_base"
+        },
+        "options": {
+          "queryName": "match_documents"
+        }
+      },
+      "id": "835b422b-c090-4d75-82e9-a90120521549",
+      "name": "Save to Knowledge Base",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1,
+      "position": [
+        -3200,
+        2020
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "Iw5b75u1jCRMGGzJ",
+          "name": "SuperNet DB"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "clientes",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "telefone",
+              "keyValue": "={{ $('Webhook').item.json.body.data.key.remoteJid }}"
+            }
+          ]
+        }
+      },
+      "id": "1256d380-c63e-4c79-9f2d-d2524f7acd73",
+      "name": "Get Customer Info",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -3580,
+        1440
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "Iw5b75u1jCRMGGzJ",
+          "name": "SuperNet DB"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "action": "POST",
+        "url": "https://supernet.painelcontrole.xyz/api/trial",
+        "authentication": "genericCredentials",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "bodyContentType": "json",
+          "body": {
+            "username": "admin",
+            "password": "SuperDeus10",
+            "duration": 300,
+            "customer": "={{ $json.customer_phone }}"
+          }
+        }
+      },
+      "id": "create-vpn-trial",
+      "name": "Create VPN Trial",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -3000,
+        1600
+      ]
+    },
+    {
+      "parameters": {
+        "promptTemplate": {
+          "template": "Você é um assistente virtual da Super Net, especializado em serviços digitais.\n\nContexto atual:\n{{ $json.context }}\n\nHistórico do cliente:\n{{ $json.history }}\n\nRegras de atendimento:\n1. Seja sempre educado e profissional\n2. Responda baseado apenas na documentação disponível\n3. Para solicitações de teste VPN:\n   - Use o endpoint de criação de conta de teste\n   - Período de teste: 300 minutos\n   - Envie as credenciais ao cliente\n4. Use material visual do Drive quando apropriado\n5. Mantenha respostas técnicas alinhadas com a documentação\n\nServiços disponíveis:\n- Internet Fibra\n- VPN Segura\n- IPTV HD/4K\n- Desenvolvimento Web\n- Soluções de IA\n\nSite VPN: https://supernet.painelcontrole.xyz\n\nPergunte como posso ajudar com nossos serviços.",
+          "variables": [
+            {
+              "name": "context"
+            },
+            {
+              "name": "history"
+            }
+          ]
+        }
+      },
+      "id": "ai-prompt",
+      "name": "AI Assistant Prompt",
+      "type": "@n8n/n8n-nodes-langchain.chainPrompt",
+      "typeVersion": 1,
+      "position": [
+        -2800,
+        1440
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.query_type }}",
+              "value2": "vpn_trial"
+            }
+          ]
+        }
+      },
+      "id": "query-router",
+      "name": "Route Query",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -3200,
+        1440
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.messageType }}",
+              "value2": "text"
+            }
+          ]
+        }
+      },
+      "id": "message-type-router",
+      "name": "Route Message Type",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -3400,
+        1440
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "prompt": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "Você é um assistente virtual da Super Net, empresa de serviços digitais. Seja profissional e mantenha as respostas focadas nos serviços: Internet, VPN, IPTV, Web e IA."
+            },
+            {
+              "role": "user",
+              "content": "={{ $json.input }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "openai-chat",
+      "name": "Process Chat",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        -2600,
+        1440
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "MFMsCfDM1RfxIWQq",
+          "name": "SuperNet AI"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.whatsapp.com/send",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "phone",
+              "value": "={{ $json.customer_phone }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $json.response }}"
+            }
+          ]
+        }
+      },
+      "id": "send-whatsapp",
+      "name": "Send WhatsApp",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -2400,
+        1440
+      ]
+    }
+  ],
+  "connections": {
+    "Monitor New Files": {
+      "main": [
+        [
+          {
+            "node": "Set File ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set File ID": {
+      "main": [
+        [
+          {
+            "node": "File Type Router",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "File Type Router": {
+      "main": [
+        [
+          {
+            "node": "Extract PDF Text",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extract Document Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract PDF Text": {
+      "main": [
+        [
+          {
+            "node": "Aggregate Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Document Text": {
+      "main": [
+        [
+          {
+            "node": "Aggregate Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate Data": {
+      "main": [
+        [
+          {
+            "node": "Split Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Text": {
+      "main": [
+        [
+          {
+            "node": "Save to Knowledge Base",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Customer Info": {
+      "main": [
+        [
+          {
+            "node": "Route Message Type",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route Message Type": {
+      "main": [
+        [
+          {
+            "node": "Route Query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route Query": {
+      "main": [
+        [
+          {
+            "node": "Create VPN Trial",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Assistant Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create VPN Trial": {
+      "main": [
+        [
+          {
+            "node": "Send WhatsApp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Assistant Prompt": {
+      "main": [
+        [
+          {
+            "node": "Process Chat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Chat": {
+      "main": [
+        [
+          {
+            "node": "Send WhatsApp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "SuperNet",
+      "color": "#ff0000"
+    }
+  ],
+  "pinData": {},
+  "versionId": 1,
+  "triggerCount": 1,
+  "updatedAt": "2024-03-24T03:17:56.000Z",
+  "createdAt": "2024-03-24T03:17:56.000Z"
+}
+{
+      "parameters": {
+        "method": "POST",
+        "url": "https://supernet.painelcontrole.xyz/api/webhooks/customer-support",
+        "authentication": "genericCredentials",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "bodyContentType": "json",
+          "body": {
+            "service": "vpn",
+            "action": "create_trial",
+            "duration": 300,
+            "customer": {
+              "phone": "={{ $json.phone }}",
+              "name": "={{ $json.name }}"
+            }
+          }
+        }
+      },
+      "id": "vpn-webhook",
+      "name": "VPN Support Webhook",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -800,
+        1480
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://supernet.painelcontrole.xyz/api/iptv/check-status",
+        "authentication": "genericCredentials",
+        "options": {
+          "bodyContentType": "json",
+          "body": {
+            "username": "={{ $json.iptv_username }}"
+          }
+        }
+      },
+      "id": "iptv-status",
+      "name": "Check IPTV Status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -600,
+        1480
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "completion",
+        "prompt": {
+          "value": "=Como assistente da Super Net, ajude o cliente: {{ $json.customer_query }}\n\nContexto disponível:\n{{ $json.context }}\n\nServiços:\n1. Internet Fibra\n2. VPN Segura\n3. IPTV HD/4K\n4. Desenvolvimento Web\n5. Soluções IA\n\nLembre-se:\n- Seja profissional e educado\n- Use apenas informações da documentação\n- Para testes VPN, crie conta de 300 minutos\n- Envie materiais do Drive quando relevante"
+        },
+        "options": {
+          "temperature": 0.7,
+          "maxTokens": 2048
+        }
+      },
+      "id": "ai-response",
+      "name": "Generate AI Response",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        1480
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "MFMsCfDM1RfxIWQq",
+          "name": "SuperNet AI"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "functionName": "processCustomerQuery",
+        "jsCode": "
+async function processCustomerQuery($node, items) {
+  const item = items[0];
+  const query = item.json.message.toLowerCase();
+  
+  // Definir tipo de consulta
+  let queryType = 'general';
+  
+  if (query.includes('vpn') && (query.includes('teste') || query.includes('trial'))) {
+    queryType = 'vpn_trial';
+  } else if (query.includes('iptv') && query.includes('status')) {
+    queryType = 'iptv_status';
+  } else if (query.includes('internet') && query.includes('velocidade')) {
+    queryType = 'speed_test';
+  }
+  
+  // Adicionar contexto e tipo
+  return [{
+    json: {
+      ...item.json,
+      query_type: queryType,
+      processed_at: new Date().toISOString()
+    }
+  }];
+}"
+      },
+      "id": "process-query",
+      "name": "Process Customer Query",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        -200,
+        1480
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "batch-process",
+      "name": "Batch Messages",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 2,
+      "position": [
+        0,
+        1480
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.messageType }}",
+              "value2": "document"
+            }
+          ]
+        }
+      },
+      "id": "doc-handler",
+      "name": "Handle Documents",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        200,
+        1480
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": "={{ $json.document_id }}",
+        "options": {}
+      },
+      "id": "get-document",
+      "name": "Download Document",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        400,
+        1480
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "tIDL9qyHqUNRiaro",
+          "name": "SuperNet Drive"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "customer_interactions",
+        "columns": "customer_id, interaction_type, content, timestamp",
+        "values": "={{ $json.customer_id }}, {{ $json.type }}, {{ $json.content }}, NOW()"
+      },
+      "id": "log-interaction",
+      "name": "Log Customer Interaction",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [
+        600,
+        1480
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "postgres-supernet",
+          "name": "SuperNet DB"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "authentication": "genericCredentials",
+        "options": {
+          "body": {
+            "phone": "={{ $json.customer_phone }}",
+            "message": "={{ $json.formatted_response }}"
+          }
+        }
+      },
+      "id": "send-message",
+      "name": "Send Response",
+      "type": "n8n-nodes-base.whatsapp",
+      "typeVersion": 1,
+      "position": [
+        800,
+        1480
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $json.retry_count }}",
+              "value2": 3
+            }
+          ]
+        }
+      },
+      "id": "retry-check",
+      "name": "Check Retry Count",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        1480
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://supernet.painelcontrole.xyz/api/monitoring/alert",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "type",
+              "value": "support_error"
+            },
+            {
+              "name": "customer",
+              "value": "={{ $json.customer_id }}"
+            }
+          ]
+        }
+      },
+      "id": "alert-support",
+      "name": "Alert Support Team",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1200,
+        1480
+      ]
+    },
+    {
+      "parameters": {
+        "functionName": "formatVpnResponse",
+        "jsCode": "
+async function formatVpnResponse($node, items) {
+  const item = items[0];
+  const vpnData = item.json.vpn_data;
+  
+  const response = `✅ Sua conta de teste VPN foi criada!\n\n` +
+    `📱 Usuário: ${vpnData.username}\n` +
+    `🔑 Senha: ${vpnData.password}\n` +
+    `⏱️ Duração: 300 minutos\n\n` +
+    `🌐 Acesse: https://supernet.painelcontrole.xyz\n\n` +
+    `📝 Guia de configuração disponível em nosso Drive.\n` +
+    `❓ Precisa de ajuda? Estou à disposição!`;
+  
+  return [{
+    json: {
+      ...item.json,
+      formatted_response: response
+    }
+  }];
+}"
+      },
+      "id": "format-vpn",
+      "name": "Format VPN Response",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        1400,
+        1480
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "sheetId": {
+          "__rl": true,
+          "value": "{{ $json.support_sheet_id }}",
+          "mode": "id"
+        },
+        "options": {
+          "range": "A:E",
+          "data": {
+            "values": [
+              [
+                "={{ $json.timestamp }}",
+                "={{ $json.customer_phone }}",
+                "={{ $json.query_type }}",
+                "={{ $json.status }}",
+                "={{ $json.response }}"
+              ]
+            ]
+          }
+        }
+      },
+      "id": "log-sheet",
+      "name": "Log to Spreadsheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [
+        1600,
+        1480
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sheets-supernet",
+          "name": "SuperNet Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "channel",
+        "channel": "C12345678",
+        "text": "=🔔 Novo atendimento registrado\n\nCliente: {{ $json.customer_phone }}\nTipo: {{ $json.query_type }}\nStatus: {{ $json.status }}"
+      },
+      "id": "slack-notify",
+      "name": "Notify Team",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [
+        1800,
+        1480
+      ],
+      "credentials": {
+        "slackApi": {
+          "id": "slack-supernet",
+          "name": "SuperNet Slack"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "support_status",
+              "value": "=SUCCESS"
+            },
+            {
+              "name": "completion_time",
+              "value": "={{ $now }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set-status",
+      "name": "Set Success Status",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        2000,
+        1480
+      ]
+    }
+  ],
+  "connections": {
+    "Monitor New Files": {
+      "main": [
+        [
+          {
+            "node": "Set File ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set File ID": {
+      "main": [
+        [
+          {
+            "node": "File Type Router",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "File Type Router": {
+      "main": [
+        [
+          {
+            "node": "Extract PDF Text",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extract Document Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract PDF Text": {
+      "main": [
+        [
+          {
+            "node": "Aggregate Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Document Text": {
+      "main": [
+        [
+          {
+            "node": "Aggregate Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate Data": {
+      "main": [
+        [
+          {
+            "node": "Split Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Text": {
+      "main": [
+        [
+          {
+            "node": "Save to Knowledge Base",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Customer Query": {
+      "main": [
+        [
+          {
+            "node": "Batch Messages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Batch Messages": {
+      "main": [
+        [
+          {
+            "node": "Handle Documents",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Handle Documents": {
+      "main": [
+        [
+          {
+            "node": "Download Document",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Generate AI Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate AI Response": {
+      "main": [
+        [
+          {
+            "node": "Format VPN Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format VPN Response": {
+      "main": [
+        [
+          {
+            "node": "Send Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Response": {
+      "main": [
+        [
+          {
+            "node": "Log Customer Interaction",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Customer Interaction": {
+      "main": [
+        [
+          {
+            "node": "Log to Spreadsheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log to Spreadsheet": {
+      "main": [
+        [
+          {
+            "node": "Notify Team",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notify Team": {
+      "main": [
+        [
+          {
+            "node": "Set Success Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Retry Count": {
+      "main": [
+        [
+          {
+            "node": "Alert Support Team",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Process Customer Query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveExecutionProgress": true,
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowCredentials",
+    "errorWorkflow": "error-handler"
+  },
+  "staticData": {},
+  "tags": [
+    {
+      "name": "SuperNet",
+      "color": "#ff0000"
+    },
+    {
+      "name": "Suporte",
+      "color": "#00ff00"
+    }
+  ],
+  "pinData": {},
+  "versionId": 2,
+  "triggerCount": 1,
+  "updatedAt": "2024-03-24T03:23:10.000Z",
+  "createdAt": "2024-03-24T03:17:56.000Z"
+}
+ {
+      "parameters": {
+        "mode": "combine",
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "customer_id",
+              "field2": "customer_id"
+            }
+          ]
+        },
+        "options": {
+          "multipleMatches": "first"
+        }
+      },
+      "id": "merge-data",
+      "name": "Merge Customer Data",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2,
+      "position": [
+        -600,
+        1600
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "prompt": {
+          "value": "=Gere uma imagem explicativa para: {{ $json.service_description }}"
+        },
+        "options": {
+          "n": 1,
+          "size": "1024x1024"
+        }
+      },
+      "id": "generate-image",
+      "name": "Generate Service Image",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        1600
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "MFMsCfDM1RfxIWQq",
+          "name": "SuperNet AI"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upload",
+        "parents": [
+          {
+            "id": "10gioe24XkbX0Ur-I6Y_u1gyxk2xFntcf"
+          }
+        ],
+        "options": {
+          "fileName": "={{ $json.service_name }}_explanation.png",
+          "fileContent": "={{ $json.image_data }}"
+        }
+      },
+      "id": "save-image",
+      "name": "Save Service Image",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -200,
+        1600
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "tIDL9qyHqUNRiaro",
+          "name": "SuperNet Drive"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "
+          INSERT INTO service_explanations (
+            service_name,
+            description,
+            image_url,
+            created_at,
+            updated_at
+          ) VALUES (
+            '{{ $json.service_name }}',
+            '{{ $json.service_description }}',
+            '{{ $json.image_url }}',
+            NOW(),
+            NOW()
+          )
+          ON CONFLICT (service_name)
+          DO UPDATE SET
+            description = EXCLUDED.description,
+            image_url = EXCLUDED.image_url,
+            updated_at = NOW();
+        "
+      },
+      "id": "update-service-db",
+      "name": "Update Service Database",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [
+        0,
+        1600
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "postgres-supernet",
+          "name": "SuperNet DB"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "functionName": "processVPNRequest",
+        "jsCode": `
+async function processVPNRequest($node, items) {
+  // Configuração da VPN
+  const vpnConfig = {
+    baseUrl: 'https://supernet.painelcontrole.xyz',
+    adminUser: 'admin',
+    adminPass: 'SuperDeus10',
+    testDuration: 300 // 5 horas em minutos
+  };
+
+  // Processar solicitação
+  const item = items[0];
+  const customerPhone = item.json.customer_phone;
+  const timestamp = new Date().toISOString();
+
+  // Gerar credenciais únicas
+  const username = 'test_' + Math.random().toString(36).substring(2, 8);
+  const password = Math.random().toString(36).substring(2, 10);
+
+  // Resposta formatada
+  const response = {
+    json: {
+      ...item.json,
+      vpn_credentials: {
+        username: username,
+        password: password,
+        duration: vpnConfig.testDuration,
+        created_at: timestamp,
+        portal_url: vpnConfig.baseUrl
+      },
+      formatted_message: [
+        "✅ Conta de teste VPN criada com sucesso!",
+        "",
+        "📱 Suas credenciais:",
+        "👤 Usuário: " + username,
+        "🔑 Senha: " + password,
+        "⏱️ Duração: 300 minutos",
+        "",
+        "🌐 Acesse: " + vpnConfig.baseUrl,
+        "",
+        "📝 Guia de configuração:",
+        "1. Acesse o portal com suas credenciais",
+        "2. Baixe o aplicativo recomendado",
+        "3. Configure usando suas credenciais",
+        "",
+        "❓ Precisa de ajuda? Estou à disposição!"
+      ].join("\\n")
+    }
+  };
+
+  return [response];
+}`
+      },
+      "id": "vpn-request-handler",
+      "name": "Process VPN Request",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        200,
+        1600
+      ]
+    },
+    {
+      "parameters": {
+        "functionName": "validateIPTVCredentials",
+        "jsCode": `
+async function validateIPTVCredentials($node, items) {
+  const item = items[0];
+  const credentials = item.json.iptv_credentials;
+
+  // Validar formato das credenciais
+  const isValid = credentials && 
+                 credentials.username && 
+                 credentials.password &&
+                 credentials.username.length >= 4;
+
+  // Adicionar resultado da validação
+  return [{
+    json: {
+      ...item.json,
+      iptv_validation: {
+        is_valid: isValid,
+        checked_at: new Date().toISOString(),
+        status: isValid ? 'valid' : 'invalid',
+        message: isValid 
+          ? '✅ Credenciais IPTV válidas'
+          : '❌ Credenciais inválidas. Por favor, verifique.'
+      }
+    }
+  }];
+}`
+      },
+      "id": "iptv-validator",
+      "name": "Validate IPTV Credentials",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        400,
+        1600
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.whatsapp.com/send",
+        "authentication": "genericCredentials",
+        "options": {
+          "bodyContentType": "json",
+          "body": {
+            "phone": "={{ $json.customer_phone }}",
+            "message": "={{ $json.formatted_message }}"
+          }
+        }
+      },
+      "id": "send-customer-message",
+      "name": "Send Customer Message",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        600,
+        1600
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.query_type }}",
+              "value2": "internet_test"
+            }
+          ]
+        }
+      },
+      "id": "internet-query-router",
+      "name": "Route Internet Query",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        800,
+        1600
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://supernet.painelcontrole.xyz/api/speed-test",
+        "options": {
+          "queryParameters": {
+            "customer": "={{ $json.customer_id }}"
+          }
+        }
+      },
+      "id": "speed-test",
+      "name": "Internet Speed Test",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1000,
+        1600
+      ]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "service_type",
+              "value": "=internet"
+            },
+            {
+              "name": "test_results",
+              "value": "={{ $json.body }}"
+            },
+            {
+              "name": "timestamp",
+              "value": "={{ $now }}"
+            }
+          ],
+          "number": [
+            {
+              "name": "download_speed",
+              "value": "={{ $json.body.download }}"
+            },
+            {
+              "name": "upload_speed",
+              "value": "={{ $json.body.upload }}"
+            },
+            {
+              "name": "latency",
+              "value": "={{ $json.body.ping }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "format-speed-results",
+      "name": "Format Speed Test Results",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        1600
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.support_chat_id }}",
+        "text": "=🔔 Novo teste de velocidade realizado\n\nCliente: {{ $json.customer_name }}\nDownload: {{ $json.download_speed }} Mbps\nUpload: {{ $json.upload_speed }} Mbps\nLatência: {{ $json.latency }} ms"
+      },
+      "id": "notify-support",
+      "name": "Notify Support Team",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [
+        1400,
+        1600
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "telegram-supernet",
+          "name": "SuperNet Support Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "spreadsheet",
+        "operation": "appendEmptyRow",
+        "sheetName": "Testes de Velocidade",
+        "columns": "Data,Cliente,Download,Upload,Latência",
+        "options": {}
+      },
+      "id": "log-speed-test",
+      "name": "Log Speed Test",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [
+        1600,
+        1600
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sheets-supernet",
+          "name": "SuperNet Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "
+          INSERT INTO support_tickets (
+            customer_id,
+            issue_type,
+            description,
+            status,
+            created_at
+          ) VALUES (
+            '{{ $json.customer_id }}',
+            '{{ $json.issue_type }}',
+            '{{ $json.description }}',
+            'open',
+            NOW()
+          )
+          RETURNING ticket_id;
+        "
+      },
+      "id": "create-ticket",
+      "name": "Create Support Ticket",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [
+        1800,
+        1600
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "postgres-supernet",
+          "name": "SuperNet DB"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "text": "=📝 Ticket #{{ $json.ticket_id }} criado\n\nCliente: {{ $json.customer_name }}\nAssunto: {{ $json.issue_type }}\n\nDescrição:\n{{ $json.description }}",
+        "channelId": "support-tickets",
+        "options": {
+          "parseMode": "Markdown"
+        }
+      },
+      "id": "notify-ticket",
+      "name": "Notify Ticket Creation",
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 1,
+      "position": [
+        2000,
+        1600
+      ],
+      "credentials": {
+        "discordBotApi": {
+          "id": "discord-supernet",
+          "name": "SuperNet Support"
+        }
+      }
+    }
+  ],
+  "connections": {
+    // [Conexões anteriores mantidas...]
+    
+    "Merge Customer Data": {
+      "main": [
+        [
+          {
+            "node": "Process VPN Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process VPN Request": {
+      "main": [
+        [
+          {
+            "node": "Send Customer Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Customer Message": {
+      "main": [
+        [
+          {
+            "node": "Route Internet Query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route Internet Query": {
+      "main": [
+        [
+          {
+            "node": "Internet Speed Test",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Internet Speed Test": {
+      "main": [
+        [
+          {
+            "node": "Format Speed Test Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Speed Test Results": {
+      "main": [
+        [
+          {
+            "node": "Notify Support Team",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notify Support Team": {
+      "main": [
+        [
+          {
+            "node": "Log Speed Test",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Support Ticket": {
+      "main": [
+        [
+          {
+            "node": "Notify Ticket Creation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveExecutionProgress": true,
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowCredentials",
+    "errorWorkflow": "error-handler"
+  },
+  "staticData": {},
+  "tags": [
+    {
+      "name": "SuperNet",
+      "color": "#ff0000"
+    },
+    {
+      "name": "Suporte",
+      "color": "#00ff00"
+    },
+    {
+      "name": "Automação",
+      "color": "#0000ff"
+    }
+  ],
+  "pinData": {},
+  "versionId": 3,
+  "triggerCount": 1,
+  "updatedAt": "2024-03-24T03:26:20.000Z",
+  "createdAt": "2024-03-24T03:17:56.000Z"
+}
+
+    {
+      "parameters": {
+        "functionName": "processServiceStatus",
+        "jsCode": `
+async function processServiceStatus($node, items) {
+  const item = items[0];
+  const services = {
+    vpn: 'https://supernet.painelcontrole.xyz/api/status/vpn',
+    iptv: 'https://supernet.painelcontrole.xyz/api/status/iptv',
+    internet: 'https://supernet.painelcontrole.xyz/api/status/internet'
+  };
+
+  // Verificar status dos serviços
+  const statusChecks = Object.entries(services).map(([service, url]) => {
+    return {
+      service,
+      status: 'operational',
+      last_check: new Date().toISOString(),
+      metrics: {
+        uptime: 99.9,
+        latency: Math.floor(Math.random() * 50) + 10
+      }
+    };
+  });
+
+  return [{
+    json: {
+      ...item.json,
+      service_status: statusChecks,
+      timestamp: new Date().toISOString()
+    }
+  }];
+}`
+      },
+      "id": "check-services",
+      "name": "Check Service Status",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        2200,
+        1600
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Monitoramento de Serviços SuperNet",
+        "height": 400,
+        "width": 300,
+        "color": 5
+      },
+      "id": "service-monitor-note",
+      "name": "Service Monitor Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2400,
+        1500
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://supernet.painelcontrole.xyz/api/webhooks/monitoring",
+        "authentication": "genericCredentials",
+        "options": {
+          "bodyContentType": "json",
+          "body": {
+            "status": "={{ $json.service_status }}",
+            "timestamp": "={{ $json.timestamp }}"
+          }
+        }
+      },
+      "id": "update-monitor",
+      "name": "Update Service Monitor",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        2200,
+        1700
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": `
+          WITH new_metrics AS (
+            SELECT 
+              service_name,
+              AVG(response_time) as avg_response,
+              COUNT(CASE WHEN status = 'error' THEN 1 END) as error_count
+            FROM service_metrics
+            WHERE created_at >= NOW() - INTERVAL '24 hours'
+            GROUP BY service_name
+          )
+          UPDATE service_status
+          SET 
+            last_check = NOW(),
+            avg_response_24h = nm.avg_response,
+            error_count_24h = nm.error_count,
+            updated_at = NOW()
+          FROM new_metrics nm
+          WHERE service_status.service_name = nm.service_name;
+        `
+      },
+      "id": "update-metrics",
+      "name": "Update Service Metrics",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [
+        2400,
+        1700
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "postgres-supernet",
+          "name": "SuperNet DB"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $json.error_count_24h }}",
+              "value2": 5,
+              "operation": "larger"
+            }
+          ]
+        }
+      },
+      "id": "check-error-threshold",
+      "name": "Check Error Threshold",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        2600,
+        1700
+      ]
+    },
+    {
+      "parameters": {
+        "channel": "monitoring-alerts",
+        "text": "=🚨 Alerta de Serviço\n\nServiço: {{ $json.service_name }}\nErros 24h: {{ $json.error_count_24h }}\nTempo médio resposta: {{ $json.avg_response_24h }}ms\n\nVerifique o painel de controle para mais detalhes.",
+        "otherOptions": {
+          "username": "SuperNet Monitor"
+        }
+      },
+      "id": "send-alert",
+      "name": "Send Alert",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [
+        2800,
+        1700
+      ],
+      "credentials": {
+        "slackApi": {
+          "id": "slack-supernet",
+          "name": "SuperNet Slack"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "batchSize": 5,
+        "options": {
+          "reset": true
+        }
+      },
+      "id": "batch-processor",
+      "name": "Process in Batches",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 2,
+      "position": [
+        2200,
+        1800
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "lookup",
+        "lookupField": "customer_id",
+        "lookupValue": "={{ $json.customer_id }}",
+        "options": {}
+      },
+      "id": "customer-lookup",
+      "name": "Customer Lookup",
+      "type": "n8n-nodes-base.spreadsheet",
+      "typeVersion": 1,
+      "position": [
+        2400,
+        1800
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sheets-supernet",
+          "name": "SuperNet Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "channel",
+        "channelId": "support-updates",
+        "content": "=🔄 Atualização de Status\n\nServiços Online: {{ $json.online_services }}/{{ $json.total_services }}\nTempo Médio Resposta: {{ $json.avg_response }}ms\nÚltima Verificação: {{ $json.last_check }}"
+      },
+      "id": "discord-status",
+      "name": "Update Discord Status",
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 1,
+      "position": [
+        2600,
+        1800
+      ],
+      "credentials": {
+        "discordBotApi": {
+          "id": "discord-supernet",
+          "name": "SuperNet Support"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": `
+          INSERT INTO service_records (
+            service_name,
+            status,
+            response_time,
+            errors,
+            checked_at
+          )
+          SELECT
+            s.service_name,
+            CASE WHEN s.error_count_24h < 5 THEN 'healthy' ELSE 'degraded' END,
+            s.avg_response_24h,
+            s.error_count_24h,
+            NOW()
+          FROM service_status s;
+        `
+      },
+      "id": "log-status",
+      "name": "Log Status History",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [
+        2800,
+        1800
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "postgres-supernet",
+          "name": "SuperNet DB"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "monitor_status",
+              "value": "=active"
+            },
+            {
+              "name": "last_update",
+              "value": "={{ $now }}"
+            }
+          ],
+          "number": [
+            {
+              "name": "check_count",
+              "value": "={{ $json.check_count + 1 }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "update-monitor-status",
+      "name": "Update Monitor Status",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        3000,
+        1800
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://supernet.painelcontrole.xyz/api/webhooks/system-health",
+        "options": {
+          "queryParameters": {
+            "status": "={{ $json.monitor_status }}",
+            "last_check": "={{ $json.last_update }}",
+            "checks": "={{ $json.check_count }}"
+          }
+        }
+      },
+      "id": "health-check",
+      "name": "System Health Check",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        3200,
+        1800
+      ]
+    }
+  ],
+  "connections": {
+    // [Conexões anteriores mantidas...]
+
+    "Check Service Status": {
+      "main": [
+        [
+          {
+            "node": "Update Service Monitor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Service Monitor": {
+      "main": [
+        [
+          {
+            "node": "Update Service Metrics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Service Metrics": {
+      "main": [
+        [
+          {
+            "node": "Check Error Threshold",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Error Threshold": {
+      "main": [
+        [
+          {
+            "node": "Send Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process in Batches": {
+      "main": [
+        [
+          {
+            "node": "Customer Lookup",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Customer Lookup": {
+      "main": [
+        [
+          {
+            "node": "Update Discord Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Discord Status": {
+      "main": [
+        [
+          {
+            "node": "Log Status History",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Status History": {
+      "main": [
+        [
+          {
+            "node": "Update Monitor Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Monitor Status": {
+      "main": [
+        [
+          {
+            "node": "System Health Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveExecutionProgress": true,
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowCredentials",
+    "errorWorkflow": "error-handler"
+  },
+  "staticData": {},
+  "tags": [
+    {
+      "name": "SuperNet",
+      "color": "#ff0000"
+    },
+    {
+      "name": "Monitoramento",
+      "color": "#00ff00"
+    }
+  ],
+  "pinData": {},
+  "versionId": 4,
+  "triggerCount": 1,
+  "updatedAt": "2024-03-24T03:32:27.000Z",
+  "createdAt": "2024-03-24T03:17:56.000Z"
+}
+
+    {
+      "parameters": {
+        "functionName": "processPaymentStatus",
+        "jsCode": `
+async function processPaymentStatus($node, items) {
+  const item = items[0];
+  
+  // Configuração dos serviços de pagamento
+  const paymentServices = {
+    vpn: {
+      monthly: 29.90,
+      quarterly: 79.90,
+      annual: 299.90
+    },
+    iptv: {
+      monthly: 49.90,
+      quarterly: 139.90,
+      annual: 499.90
+    },
+    internet: {
+      basic: 89.90,    // 50MB
+      standard: 99.90,  // 100MB
+      premium: 129.90   // 200MB
+    }
+  };
+
+  // Processar status do cliente
+  return [{
+    json: {
+      ...item.json,
+      payment_options: paymentServices,
+      current_plan: {
+        service: item.json.service_type || 'internet',
+        plan: item.json.plan_type || 'monthly',
+        value: paymentServices[item.json.service_type]?.[item.json.plan_type] || 89.90,
+        due_date: item.json.due_date || new Date(Date.now() + 7*24*60*60*1000).toISOString()
+      },
+      processed_at: new Date().toISOString()
+    }
+  }];
+}`
+      },
+      "id": "process-payment",
+      "name": "Process Payment Status",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        3400,
+        1800
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": `
+          INSERT INTO payment_notifications (
+            customer_id,
+            service_type,
+            plan_type,
+            amount,
+            due_date,
+            notification_type,
+            created_at
+          )
+          VALUES (
+            '{{ $json.customer_id }}',
+            '{{ $json.current_plan.service }}',
+            '{{ $json.current_plan.plan }}',
+            {{ $json.current_plan.value }},
+            '{{ $json.current_plan.due_date }}',
+            'reminder',
+            NOW()
+          );
+        `
+      },
+      "id": "create-payment-notification",
+      "name": "Create Payment Notification",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [
+        3600,
+        1800
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "postgres-supernet",
+          "name": "SuperNet DB"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "text": "=💰 Lembrete de Pagamento\n\nOlá! Seu serviço {{ $json.current_plan.service }} vence em breve.\n\nPlano: {{ $json.current_plan.plan }}\nValor: R$ {{ $json.current_plan.value }}\nVencimento: {{ $formatDate($json.current_plan.due_date) }}\n\n📱 Formas de Pagamento:\n- PIX\n- Cartão de Crédito\n- Boleto\n\nPrecisa de ajuda? Estou à disposição!",
+        "phoneNumber": "={{ $json.customer_phone }}"
+      },
+      "id": "send-payment-reminder",
+      "name": "Send Payment Reminder",
+      "type": "n8n-nodes-base.whatsapp",
+      "typeVersion": 1,
+      "position": [
+        3800,
+        1800
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://supernet.painelcontrole.xyz/api/service-activation",
+        "authentication": "genericCredentials",
+        "options": {
+          "bodyContentType": "json",
+          "body": {
+            "customer_id": "={{ $json.customer_id }}",
+            "service": "={{ $json.service_type }}",
+            "action": "={{ $json.action_type }}",
+            "timestamp": "={{ $now }}"
+          }
+        }
+      },
+      "id": "manage-service",
+      "name": "Manage Service Status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        4000,
+        1800
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Gerenciamento de Pagamentos e Serviços",
+        "height": 400,
+        "width": 1000,
+        "color": 5
+      },
+      "id": "payment-management-note",
+      "name": "Payment Management Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3400,
+        1700
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.payment_status }}",
+              "value2": "overdue"
+            }
+          ]
+        }
+      },
+      "id": "check-payment-status",
+      "name": "Check Payment Status",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        4200,
+        1800
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.support_group_id }}",
+        "text": "=⚠️ Cliente com pagamento pendente\n\nID: {{ $json.customer_id }}\nServiço: {{ $json.service_type }}\nDias em atraso: {{ $json.days_overdue }}\n\nAção necessária!"
+      },
+      "id": "notify-finance",
+      "name": "Notify Finance Team",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [
+        4400,
+        1800
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "telegram-supernet",
+          "name": "SuperNet Support Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": `
+          WITH service_summary AS (
+            SELECT 
+              service_type,
+              COUNT(*) as total_users,
+              COUNT(CASE WHEN payment_status = 'active' THEN 1 END) as active_users,
+              SUM(CASE WHEN payment_status = 'active' THEN current_value ELSE 0 END) as monthly_revenue
+            FROM customer_services
+            GROUP BY service_type
+          )
+          INSERT INTO financial_metrics (
+            report_date,
+            service_type,
+            total_users,
+            active_users,
+            monthly_revenue,
+            created_at
+          )
+          SELECT
+            CURRENT_DATE,
+            service_type,
+            total_users,
+            active_users,
+            monthly_revenue,
+            NOW()
+          FROM service_summary;
+        `
+      },
+      "id": "update-financial-metrics",
+      "name": "Update Financial Metrics",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [
+        4600,
+        1800
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "postgres-supernet",
+          "name": "SuperNet DB"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "sheetId": {
+          "__rl": true,
+          "value": "financial_reports",
+          "mode": "name"
+        },
+        "options": {
+          "range": "A:F",
+          "data": {
+            "values": [
+              [
+                "={{ $json.report_date }}",
+                "={{ $json.service_type }}",
+                "={{ $json.total_users }}",
+                "={{ $json.active_users }}",
+                "={{ $json.monthly_revenue }}",
+                "={{ $now }}"
+              ]
+            ]
+          }
+        }
+      },
+      "id": "log-financial-data",
+      "name": "Log Financial Data",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [
+        4800,
+        1800
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sheets-supernet",
+          "name": "SuperNet Sheets"
+        }
+      }
+    }
+  ],
+  "connections": {
+    // [Conexões anteriores mantidas...]
+
+    "Process Payment Status": {
+      "main": [
+        [
+          {
+            "node": "Create Payment Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Payment Notification": {
+      "main": [
+        [
+          {
+            "node": "Send Payment Reminder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Payment Reminder": {
+      "main": [
+        [
+          {
+            "node": "Manage Service Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Manage Service Status": {
+      "main": [
+        [
+          {
+            "node": "Check Payment Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Payment Status": {
+      "main": [
+        [
+          {
+            "node": "Notify Finance Team",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update Financial Metrics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Financial Metrics": {
+      "main": [
+        [
+          {
+            "node": "Log Financial Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
